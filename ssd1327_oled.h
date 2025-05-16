@@ -113,14 +113,6 @@ int spi_fd;
 #define SPI_DEVICE "/dev/spidev1.0"
 #define SPI_DEFAULT_FREQ  15000000 // 8 MHz
 
-typedef struct {
-    int spi_fd;
-    struct gpiod_line_request *rst_req;
-    struct gpiod_line_request *cs_req;
-    struct gpiod_line_request *dc_req;
-    struct gpiod_line_request *led_req;
-    uint32_t _freq;
-} SSD1327;
 
 //
 // Colors

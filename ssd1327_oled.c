@@ -11,6 +11,16 @@
 
 
 #include "ssd1327_oled.h"
+typedef struct {
+    int spi_fd;
+    struct gpiod_line_request *rst_req;
+    struct gpiod_line_request *cs_req;
+    struct gpiod_line_request *dc_req;
+    struct gpiod_line_request *led_req;
+    uint32_t _freq;
+} ssd1327;
+ ssd1327 SSD1327;  // or global if needed
+
 
 #define SSD1327_BUFFERSIZE (SSD1327_LCDHEIGHT * SSD1327_LCDWIDTH / 2)
 static uint8_t buffer[SSD1327_BUFFERSIZE];
