@@ -10,7 +10,7 @@
 
 #ifndef GFX_SSD1327_H_
 #define GFX_SSD1327_H_
-
+#include <stdint.h>
 /***************************************************************
  *
  * 		SETTINGS
