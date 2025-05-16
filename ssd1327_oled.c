@@ -68,24 +68,24 @@ void setLineValue(struct gpiod_line_request *request, unsigned int line_offset, 
 }
 void Pin_RES_High(void) 
 {
-    setLineValue(st7735.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_ACTIVE);
+    setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_ACTIVE);
     printf("Pin_RES_High\r\n");
 }
 
 void Pin_RES_Low(void) 
 {
-    setLineValue(st7735.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_INACTIVE);
+    setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_INACTIVE);
     printf("Pin_RES_Low\r\n");
 }
 
 void Pin_DC_High(void) 
 {
-    setLineValue(st7735.dc_req, GPIO_LINE_LCD_DC, GPIOD_LINE_VALUE_ACTIVE);
+    setLineValue(SSD1327.dc_req, GPIO_LINE_LCD_DC, GPIOD_LINE_VALUE_ACTIVE);
 }
 
 void Pin_DC_Low(void) 
 {
-   setLineValue(st7735.dc_req, GPIO_LINE_LCD_DC, GPIOD_LINE_VALUE_INACTIVE); // Command mode
+   setLineValue(SSD1327.dc_req, GPIO_LINE_LCD_DC, GPIOD_LINE_VALUE_INACTIVE); // Command mode
 }
 
 void SPI_send(uint16_t len, uint8_t *data) 
@@ -107,7 +107,7 @@ void SPI_send(uint16_t len, uint8_t *data)
         tr.len = chunk_size;
 
         // Perform the SPI transfer
-        if (ioctl(st7735.spi_fd, SPI_IOC_MESSAGE(1), &tr) < 0) {
+        if (ioctl(SSD1327.spi_fd, SPI_IOC_MESSAGE(1), &tr) < 0) {
             printf("failed spi");
             return;
         }
@@ -176,9 +176,9 @@ void SSD1327_Data(uint8_t dat)
 
 void SSD1327_Reset(void)
 {
-	setLineValue(st7735.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_INACTIVE);
+	setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_INACTIVE);
 	usleep(2000);
-	setLineValue(st7735.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_ACTIVE);
+	setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_ACTIVE);
 }
 
 //
