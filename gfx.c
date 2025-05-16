@@ -79,7 +79,7 @@ void GFX_DrawChar(int x, int y, char chr, uint8_t color, uint8_t background)
     }
 }
 
-void GFX_DrawString(int x, int y, char* str, uint8_t color, uint8_t background)
+void GFX_DrawString(int x, int y,const char* str, uint8_t color, uint8_t background)
 {
 	int x_tmp = x;
 	char znak;
