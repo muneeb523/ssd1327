@@ -161,7 +161,7 @@ void SSD1327_init_peripherals(uint32_t freq)
 void SSD1327_Command(uint8_t com)
 {
 	Pin_DC_Low();
-    usleep(2);
+    usleep(2000);
     SPI_send(1, &com);
 
 }
@@ -169,7 +169,7 @@ void SSD1327_Command(uint8_t com)
 void SSD1327_Data(uint8_t dat)
 {
 	Pin_DC_High();
-	HAL_Delay(2);
+	usleep(2000);
 	SPI_send(1, &dat);
 }
 
