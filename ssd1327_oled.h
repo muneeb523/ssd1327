@@ -102,7 +102,6 @@
 #define SSD1327_RIGHT_HORIZONTAL_SCROLL	0x26
 #define SSD1327_LEFT_HORIZONTAL_SCROLL	0x27
 
-int spi_fd;
 
 #define GPIO_DEVICE4 "/dev/gpiochip3"
 #define GPIO_LINE_LCD_RST 1
