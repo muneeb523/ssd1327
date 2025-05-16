@@ -45,7 +45,7 @@
  * 		1 - will be compiled
  * 		0 - won't be compiled
  */
-#define GRAPHIC_ACCELERATION_COMMANDS 1
+#define GRAPHIC_ACCELERATION_COMMANDS 0
 
 /****************************************************************/
 #include <stdio.h>
@@ -146,16 +146,10 @@ typedef enum
 //
 // Functions
 //
-#ifdef SSD1327_I2C_CONTROL
-void SSD1327_I2cInit(I2C_HandleTypeDef *i2c);
-#endif
-#if defined(SSD1327_SPI_CONTROL) && !defined(SSD1327_SPI_DMA_ENABLE)
-void SSD1327_DmaEndCallback(SPI_HandleTypeDef *hspi);
-#endif
 
-#ifdef SSD1327_SPI_CONTROL
+
 void SSD1327_SpiInit();
-#endif
+
 //
 // Configuration
 //

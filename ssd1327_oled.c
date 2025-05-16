@@ -386,6 +386,6 @@ void SSD1327_Bitmap(uint8_t *bitmap)
 	SSD1327_Command(0x07);
 	Pin_DC_High();
 	usleep(1000);
-	SPI_send(bitmap, (SSD1327_LCDHEIGHT * SSD1327_LCDWIDTH / 8));
+	SPI_send((SSD1327_LCDHEIGHT * SSD1327_LCDWIDTH / 8),bitmap);
 }
 
