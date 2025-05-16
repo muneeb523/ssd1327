@@ -11,6 +11,12 @@
 
 
 #include "ssd1327_oled.h"
+
+#include <linux/spi/spidev.h>
+#include <sys/ioctl.h>       // for ioctl()
+#include <fcntl.h>           // for open()
+#include <unistd.h>          // for close(), write(), read()
+
 typedef struct {
     int spi_fd;
     struct gpiod_line_request *rst_req;
@@ -19,6 +25,7 @@ typedef struct {
     struct gpiod_line_request *led_req;
     uint32_t _freq;
 } ssd1327;
+
  ssd1327 SSD1327;  // or global if needed
 
 
