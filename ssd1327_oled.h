@@ -104,12 +104,14 @@
 
 
 #define GPIO_DEVICE4 "/dev/gpiochip3"
-#define GPIO_LINE_LCD_RST 1
-#define GPIO_LINE_LCD_DC 4
-#define GPIO_LINE_LCD_LED 10
+#define GPIO_DEVICE1 "/dev/gpiochip0"
+#define GPIO_DEVICE5 "/dev/gpiochip4"
+#define GPIO_LINE_LCD_RST 17
+#define GPIO_LINE_LCD_DC 11
+#define GPIO_LINE_SPI_SELECT 27
 #define GPIO_LINE_LCD_CS 13
 
-#define SPI_DEVICE "/dev/spidev1.0"
+#define SPI_DEVICE "/dev/spidev2.0"
 #define SPI_DEFAULT_FREQ  15000000 // 8 MHz
 
 
