@@ -22,7 +22,7 @@ typedef struct {
     struct gpiod_line_request *rst_req;
     struct gpiod_line_request *cs_req;
     struct gpiod_line_request *dc_req;
-    struct gpiod_line_request *led_req;
+    struct gpiod_line_request *spi_select;
     uint32_t _freq;
 } ssd1327;
 
@@ -108,12 +108,17 @@ void Pin_DC_Low(void)
 void SPI_send(uint16_t len, uint8_t *data) 
 {
 
+
+
 	struct spi_ioc_transfer tr = {};
     tr.speed_hz = SPI_DEFAULT_FREQ;
     tr.bits_per_word = 8;
     tr.tx_buf = (uintptr_t)data; // Pointing to data array
     tr.len = len; // Length to send
     tr.cs_change = true;
+
+
+	setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_ACTIVE);
 
 
     // If the length is greater than 1 byte, send in chunks if needed
@@ -134,6 +139,8 @@ void SPI_send(uint16_t len, uint8_t *data)
         len -= chunk_size;
     }
 
+	setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_INACTIVE);
+
     // End transmission: Pull CS high
 }
 void SSD1327_init_peripherals(uint32_t freq)
@@ -146,8 +153,8 @@ void SSD1327_init_peripherals(uint32_t freq)
 
 	SSD1327.rst_req = requestOutputLine(GPIO_DEVICE4, GPIO_LINE_LCD_RST, "LCD_RST");
 	// SSD1327.cs_req  = requestOutputLine(GPIO_DEVICE5, GPIO_LINE_LCD_CS,  "LCD_CS");
-	SSD1327.dc_req = requestOutputLine(GPIO_DEVICE4, GPIO_LINE_LCD_DC, "LCD_DC");
-	SSD1327.led_req = requestOutputLine(GPIO_DEVICE4, GPIO_LINE_LCD_LED, "LCD_LED");
+	SSD1327.dc_req = requestOutputLine(GPIO_DEVICE1, GPIO_LINE_LCD_DC, "LCD_DC");
+	SSD1327.spi_select = requestOutputLine(GPIO_DEVICE5, GPIO_LINE_SPI_SELECT, "SPI_SELECT");
 
 	// Open the SPI device
 	SSD1327.spi_fd = open(SPI_DEVICE, O_RDWR);
@@ -405,4 +412,3 @@ void SSD1327_Bitmap(uint8_t *bitmap)
 	usleep(1000);
 	SPI_send((SSD1327_LCDHEIGHT * SSD1327_LCDWIDTH / 8),bitmap);
 }
-
