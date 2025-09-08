@@ -107,42 +107,25 @@ void Pin_DC_Low(void)
 
 void SPI_send(uint16_t len, uint8_t *data) 
 {
-
-
-
-	struct spi_ioc_transfer tr = {};
+    struct spi_ioc_transfer tr = {};
     tr.speed_hz = SPI_DEFAULT_FREQ;
     tr.bits_per_word = 8;
-    tr.tx_buf = (uintptr_t)data; // Pointing to data array
-    tr.len = len; // Length to send
-    tr.cs_change = true;
+    tr.tx_buf = (uintptr_t)data;
 
-
-	setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_ACTIVE);
-
-
-    // If the length is greater than 1 byte, send in chunks if needed
     while (len > 0) {
-        // If the length to send is greater than what can be handled in one transfer, adjust
-        uint16_t chunk_size = (len > 256) ? 256 : len; // Adjust the chunk size, here assuming 256 bytes is safe
-
+        uint16_t chunk_size = (len > 256) ? 256 : len;
         tr.len = chunk_size;
 
-        // Perform the SPI transfer
         if (ioctl(SSD1327.spi_fd, SPI_IOC_MESSAGE(1), &tr) < 0) {
-            printf("failed spi");
+            perror("SPI transfer failed");
             return;
         }
 
-        // Update data pointer and length for the next chunk
         data += chunk_size;
-        len -= chunk_size;
+        len  -= chunk_size;
     }
-
-	setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_INACTIVE);
-
-    // End transmission: Pull CS high
 }
+
 void SSD1327_init_peripherals(uint32_t freq)
 {
 	// Default values if freq is not provided
@@ -200,10 +183,12 @@ void SSD1327_Data(uint8_t dat)
 
 void SSD1327_Reset(void)
 {
-	setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_INACTIVE);
-	usleep(2000);
-	setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_ACTIVE);
+    setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_INACTIVE);
+    usleep(5000);   // hold low 5 ms
+    setLineValue(SSD1327.rst_req, GPIO_LINE_LCD_RST, GPIOD_LINE_VALUE_ACTIVE);
+    usleep(100000); // wait 100 ms after release
 }
+
 
 //
 // Configuration functions
@@ -343,9 +328,17 @@ void SSD1327_I2cInit(I2C_HandleTypeDef *i2c)
 #ifdef SSD1327_SPI_CONTROL
 void SSD1327_SpiInit()
 {
-	SSD1327_init_peripherals(SPI_DEFAULT_FREQ);
-	SSD1327_Reset();
-	SSD1327_Init();
+    SSD1327_init_peripherals(SPI_DEFAULT_FREQ);
+
+    // Force the mux to point CS0 → OLED (Yc)
+    setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_ACTIVE);
+    usleep(5); // settle mux
+
+    // Perform reset with safe timing
+    SSD1327_Reset();
+    usleep(100000); // wait 100 ms before init sequence
+
+    SSD1327_Init();
 }
 #endif
 
