@@ -331,7 +331,7 @@ void SSD1327_SpiInit()
     SSD1327_init_peripherals(SPI_DEFAULT_FREQ);
 
     // Force the mux to point CS0 → OLED (Yc)
-    setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_INACTIVE);
+    setLineValue(SSD1327.spi_select, GPIO_LINE_SPI_SELECT, GPIOD_LINE_VALUE_ACTIVE);
     usleep(5); // settle mux
 
     // Perform reset with safe timing
