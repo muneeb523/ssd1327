@@ -33,26 +33,32 @@ extern "C"
 }
 
 
-int main(){
+int main() {
+    // Init SPI, GPIO, reset OLED
+    SSD1327_SpiInit();
 
-  printf("hello ");
+    // Wait a bit after init
+    usleep(200000); // 200 ms
 
-  SSD1327_SpiInit();
+    // 1) Fill screen white
+    SSD1327_Clear(WHITE);
+    SSD1327_Display();
+    sleep(2);
 
-   printf("hello 2");
+    // 2) Fill screen black
+    SSD1327_Clear(BLACK);
+    SSD1327_Display();
+    sleep(2);
 
-  SSD1327_Clear(BLACK);
-  GFX_SetFont(font_8x5);
+    // 3) Checkerboard pattern
+    for (int y = 0; y < SSD1327_LCDHEIGHT; y++) {
+        for (int x = 0; x < SSD1327_LCDWIDTH; x++) {
+            uint8_t color = ((x / 8 + y / 8) % 2) ? WHITE : BLACK;
+            SSD1327_DrawPixel(x, y, color);
+        }
+    }
+    SSD1327_Display();
+    sleep(5);
 
-   printf("hello 3");
-
-  GFX_SetFontSize(1);
-
- printf("hello 5");
-
-  GFX_DrawString(6, 80, "  Hello  From here   ", WHITE, BLACK);
-  SSD1327_Display();
-   printf("hello 4");
-
-
+    return 0;
 }
