@@ -35,13 +35,24 @@ extern "C"
 
 int main(){
 
+  printf("hello ");
+
   SSD1327_SpiInit();
+
+   printf("hello 2");
+
   SSD1327_Clear(BLACK);
   GFX_SetFont(font_8x5);
+
+   printf("hello 3");
+
   GFX_SetFontSize(1);
 
+ printf("hello 5");
 
   GFX_DrawString(6, 80, "  Hello  From here   ", WHITE, BLACK);
   SSD1327_Display();
+   printf("hello 4");
+
 
 }
