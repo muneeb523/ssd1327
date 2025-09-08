@@ -112,7 +112,8 @@
 #define GPIO_LINE_LCD_CS 13
 
 #define SPI_DEVICE "/dev/spidev2.0"
-#define SPI_DEFAULT_FREQ  15000000 // 8 MHz
+#define SPI_DEFAULT_FREQ 8000000   // safer, within SSD1327 spec
+
 
 
 //
